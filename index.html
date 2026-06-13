@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CodeVault AI | Prashant Raj</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0a0a;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 1rem;
+    }
+    .container { max-width: 900px; width: 100%; }
+    h1 {
+      text-align: center;
+      color: #00e5ff;
+      margin-bottom: 2rem;
+      font-size: 2.5rem;
+    }
+    .form-group { margin-bottom: 1rem; }
+    label { display: block; margin-bottom: 0.5rem; color: #aaa; }
+    select, textarea {
+      width: 100%;
+      background: #111;
+      border: 1px solid #00e5ff44;
+      border-radius: 8px;
+      padding: 0.8rem;
+      color: #fff;
+      font-family: monospace;
+      font-size: 0.9rem;
+      outline: none;
+    }
+    select { font-family: 'Segoe UI', sans-serif; }
+    textarea { height: 200px; resize: vertical; }
+    button {
+      background: #00e5ff;
+      color: #000;
+      border: none;
+      padding: 0.8rem 2rem;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: transform 0.2s;
+    }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    button:hover:not(:disabled) { transform: scale(1.02); }
+    .results {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .card {
+      background: #111;
+      border: 1px solid #00e5ff44;
+      border-radius: 12px;
+      padding: 1.2rem;
+    }
+    .card h3 { color: #00e5ff; margin-bottom: 0.5rem; }
+    .card p { margin: 0.3rem 0; font-size: 0.9rem; }
+    .error { color: #ff5555; }
+    .footer {
+      text-align: center;
+      margin-top: 2rem;
+      color: #666;
+    }
+    .footer a { color: #00e5ff; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>CodeVault AI</h1>
+    <div class="form-group">
+      <label for="language">Language</label>
+      <select id="language">
+        <option>Python</option>
+        <option>JavaScript</option>
+        <option>TypeScript</option>
+        <option>Go</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="code">Paste your code</label>
+      <textarea id="code" placeholder="Paste your code here..."></textarea>
+    </div>
+    <button id="evaluateBtn">Evaluate with AI</button>
+
+    <div id="results" class="results" style="display: none;"></div>
+
+    <div class="footer">
+      Built by <a href="https://linkedin.com/in/theprashantdev" target="_blank">Prashant Raj</a> · Full-Stack AI Developer
+    </div>
+  </div>
+
+  <script>
+    // This is your existing Vercel backend that already works
+    const API_URL = 'https://ai-chat-backend-opal.vercel.app/api/evaluate';
+
+    document.getElementById('evaluateBtn').addEventListener('click', async () => {
+      const code = document.getElementById('code').value.trim();
+      const language = document.getElementById('language').value;
+      if (!code) return alert('Please paste some code.');
+
+      const btn = document.getElementById('evaluateBtn');
+      btn.disabled = true;
+      btn.textContent = 'Evaluating...';
+
+      try {
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code, language })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          displayResults(data.results);
+        } else {
+          alert('Error: ' + data.error);
+        }
+      } catch (err) {
+        alert('Failed to reach evaluation service.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Evaluate with AI';
+      }
+    });
+
+    function displayResults(results) {
+      const container = document.getElementById('results');
+      container.style.display = 'grid';
+      container.innerHTML = results.map(r => `
+        <div class="card">
+          <h3>${r.model ? r.model.split('/').pop() : 'Model'}</h3>
+          ${r.error ? `<p class="error">⚠️ ${r.error}</p>` : ''}
+          <p>Correctness: ${r.correctness}/100</p>
+          <p>Performance: ${r.performance}/100</p>
+          <p>Edge Cases: ${r.edgeCases}/100</p>
+          <p><small>${r.feedback || ''}</small></p>
+        </div>
+      `).join('');
+    }
+  </script>
+</body>
+</html>
