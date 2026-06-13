@@ -1,6 +1,4 @@
 import { NextResponse } from 'next/server';
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
 
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY!;
 const MODELS = [
@@ -13,12 +11,7 @@ export async function POST(request: Request) {
   const { code, language } = await request.json();
   if (!code) return NextResponse.json({ error: 'No code provided' }, { status: 400 });
 
-  const cookieStore = cookies();
-  const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
-  const { data: { user } } = await supabase.auth.getUser();
-
-  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
+  // No auth check for now – just evaluate
   const modelPromises = MODELS.map(async (model) => {
     try {
       const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
@@ -52,12 +45,6 @@ export async function POST(request: Request) {
 
   const results = await Promise.all(modelPromises);
 
-  await supabase.from('reviews').insert({
-    user_id: user.id,
-    code,
-    language,
-    results,
-  });
-
+  // Not saving to DB yet – we'll add that after login is set up
   return NextResponse.json({ results });
 }
