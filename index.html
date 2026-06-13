@@ -100,52 +100,51 @@
   </div>
 
   <script>
-    // This is your existing Vercel backend that already works
-    const API_URL = 'https://ai-chat-backend-opal.vercel.app/api/evaluate';
+  const API_URL = 'https://ai-chat-backend-opal.vercel.app/api/evaluate';
 
-    document.getElementById('evaluateBtn').addEventListener('click', async () => {
-      const code = document.getElementById('code').value.trim();
-      const language = document.getElementById('language').value;
-      if (!code) return alert('Please paste some code.');
+  document.getElementById('evaluateBtn').addEventListener('click', async () => {
+    const code = document.getElementById('code').value.trim();
+    const language = document.getElementById('language').value;
+    if (!code) return alert('Please paste some code.');
 
-      const btn = document.getElementById('evaluateBtn');
-      btn.disabled = true;
-      btn.textContent = 'Evaluating...';
+    const btn = document.getElementById('evaluateBtn');
+    btn.disabled = true;
+    btn.textContent = 'Evaluating...';
 
-      try {
-        const res = await fetch(API_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ code, language })
-        });
-        const data = await res.json();
-        if (res.ok) {
-          displayResults(data.results);
-        } else {
-          alert('Error: ' + data.error);
-        }
-      } catch (err) {
-        alert('Failed to reach evaluation service.');
-      } finally {
-        btn.disabled = false;
-        btn.textContent = 'Evaluate with AI';
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code, language })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        displayResults(data.results);
+      } else {
+        alert('Error: ' + data.error);
       }
-    });
-
-    function displayResults(results) {
-      const container = document.getElementById('results');
-      container.style.display = 'grid';
-      container.innerHTML = results.map(r => `
-        <div class="card">
-          <h3>${r.model ? r.model.split('/').pop() : 'Model'}</h3>
-          ${r.error ? `<p class="error">⚠️ ${r.error}</p>` : ''}
-          <p>Correctness: ${r.correctness}/100</p>
-          <p>Performance: ${r.performance}/100</p>
-          <p>Edge Cases: ${r.edgeCases}/100</p>
-          <p><small>${r.feedback || ''}</small></p>
-        </div>
-      `).join('');
+    } catch (err) {
+      alert('Could not reach evaluation server.');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Evaluate with AI';
     }
-  </script>
+  });
+
+  function displayResults(results) {
+    const container = document.getElementById('results');
+    container.style.display = 'grid';
+    container.innerHTML = results.map(r => `
+      <div class="card">
+        <h3>${r.model ? r.model.split('/').pop().replace(' (static)', '') : 'Model'}</h3>
+        ${r.error ? `<p class="error">⚠️ ${r.error}</p>` : ''}
+        <p>Correctness: ${r.correctness}/100</p>
+        <p>Performance: ${r.performance}/100</p>
+        <p>Edge Cases: ${r.edgeCases}/100</p>
+        <p><small>${r.feedback || ''}</small></p>
+      </div>
+    `).join('');
+  }
+</script>
 </body>
 </html>
