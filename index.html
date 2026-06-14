@@ -17,279 +17,307 @@
       padding: 1rem;
     }
     .container { max-width: 900px; width: 100%; }
-    h1 {
-      text-align: center;
-      color: #00e5ff;
-      margin-bottom: 0.5rem;
-      font-size: 2.5rem;
+    h1 { text-align: center; color: #00e5ff; margin-bottom: 0.4rem; font-size: 2.5rem; }
+    .subtitle { text-align: center; color: #666; margin-bottom: 1.8rem; font-size: 0.9rem; }
+    .api-key-row {
+      display: flex; gap: 0.5rem; align-items: center;
+      background: #111; border: 1px solid #00e5ff22;
+      border-radius: 8px; padding: 0.6rem 0.8rem;
+      margin-bottom: 1.2rem;
     }
-    .subtitle {
-      text-align: center;
-      color: #888;
-      margin-bottom: 2rem;
-      font-size: 0.95rem;
+    .api-key-row label { color: #888; font-size: 0.82rem; white-space: nowrap; }
+    .api-key-row input {
+      flex: 1; background: transparent; border: none; outline: none;
+      color: #fff; font-size: 0.85rem; font-family: monospace;
     }
+    .api-key-row button {
+      background: transparent; color: #00e5ff; border: 1px solid #00e5ff44;
+      padding: 0.3rem 0.7rem; font-size: 0.78rem; border-radius: 5px;
+      cursor: pointer; white-space: nowrap;
+    }
+    .api-key-row button:hover { background: #00e5ff11; }
+    .key-note { font-size: 0.75rem; color: #555; margin-bottom: 1rem; }
+    .key-note a { color: #00e5ff88; }
     .form-group { margin-bottom: 1rem; }
-    label { display: block; margin-bottom: 0.5rem; color: #aaa; font-size: 0.9rem; }
+    label { display: block; margin-bottom: 0.4rem; color: #aaa; font-size: 0.88rem; }
     select, textarea {
-      width: 100%;
-      background: #111;
-      border: 1px solid #00e5ff44;
-      border-radius: 8px;
-      padding: 0.8rem;
-      color: #fff;
-      font-family: monospace;
-      font-size: 0.9rem;
-      outline: none;
+      width: 100%; background: #111; border: 1px solid #00e5ff33;
+      border-radius: 8px; padding: 0.75rem; color: #fff;
+      font-family: monospace; font-size: 0.9rem; outline: none;
       transition: border-color 0.2s;
     }
     select:focus, textarea:focus { border-color: #00e5ff; }
     select { font-family: 'Segoe UI', sans-serif; }
     textarea { height: 220px; resize: vertical; }
-    .btn-row { display: flex; gap: 0.75rem; align-items: center; }
-    button {
-      background: #00e5ff;
-      color: #000;
-      border: none;
-      padding: 0.8rem 2rem;
-      font-weight: bold;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: transform 0.15s, opacity 0.15s;
+    .btn-row { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+    button.primary {
+      background: #00e5ff; color: #000; border: none;
+      padding: 0.75rem 2rem; font-weight: bold; border-radius: 8px;
+      cursor: pointer; font-size: 1rem; transition: transform 0.15s, opacity 0.15s;
     }
-    button:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
-    button:hover:not(:disabled) { transform: scale(1.02); }
-    #clearBtn {
-      background: transparent;
-      color: #888;
-      border: 1px solid #333;
-      padding: 0.8rem 1.2rem;
-      font-size: 0.9rem;
+    button.primary:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+    button.primary:hover:not(:disabled) { transform: scale(1.02); }
+    button.secondary {
+      background: transparent; color: #888; border: 1px solid #333;
+      padding: 0.75rem 1.2rem; font-size: 0.9rem; border-radius: 8px;
+      cursor: pointer; transition: border-color 0.15s;
     }
-    #clearBtn:hover:not(:disabled) { border-color: #555; color: #ccc; transform: none; }
-    #status { color: #888; font-size: 0.85rem; margin-left: 0.5rem; }
+    button.secondary:hover { border-color: #555; color: #ccc; }
+    #status { color: #888; font-size: 0.82rem; }
     .results {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1rem;
-      margin-top: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem; margin-top: 2rem;
     }
     .card {
-      background: #111;
-      border: 1px solid #00e5ff44;
-      border-radius: 12px;
-      padding: 1.2rem;
-      transition: border-color 0.2s;
+      background: #111; border: 1px solid #00e5ff33;
+      border-radius: 12px; padding: 1.2rem; transition: border-color 0.2s;
     }
-    .card:hover { border-color: #00e5ff88; }
-    .card h3 { color: #00e5ff; margin-bottom: 0.75rem; font-size: 1rem; }
+    .card:hover { border-color: #00e5ff77; }
+    .card h3 { color: #00e5ff; margin-bottom: 0.8rem; font-size: 0.95rem; }
     .score-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: 0.3rem 0;
-      font-size: 0.88rem;
+      display: flex; align-items: center;
+      margin: 0.35rem 0; font-size: 0.85rem;
     }
-    .score-label { color: #aaa; }
+    .score-label { color: #aaa; width: 90px; flex-shrink: 0; }
     .score-bar-bg {
-      flex: 1;
-      height: 6px;
-      background: #222;
-      border-radius: 3px;
-      margin: 0 0.6rem;
-      overflow: hidden;
+      flex: 1; height: 6px; background: #1e1e1e;
+      border-radius: 3px; margin: 0 0.6rem; overflow: hidden;
     }
-    .score-bar { height: 100%; border-radius: 3px; background: #00e5ff; transition: width 0.4s ease; }
-    .score-val { color: #fff; min-width: 32px; text-align: right; font-weight: 600; }
-    .feedback { color: #ccc; font-size: 0.82rem; margin-top: 0.75rem; line-height: 1.5; border-top: 1px solid #1a1a1a; padding-top: 0.6rem; }
-    .error-card { border-color: #ff555566; }
-    .error-card h3 { color: #ff8888; }
-    .error-text { color: #ff7777; font-size: 0.85rem; margin-top: 0.4rem; }
+    .score-bar { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
+    .score-val { color: #fff; min-width: 30px; text-align: right; font-weight: 600; }
+    .overall-score {
+      text-align: center; font-size: 1.8rem; font-weight: 700;
+      margin-bottom: 0.6rem;
+    }
+    .feedback {
+      color: #bbb; font-size: 0.82rem; margin-top: 0.8rem;
+      line-height: 1.55; border-top: 1px solid #1c1c1c; padding-top: 0.6rem;
+    }
     .alert {
-      background: #1a0000;
-      border: 1px solid #ff444444;
-      border-radius: 8px;
-      color: #ff8888;
-      padding: 0.75rem 1rem;
-      margin-top: 1.5rem;
-      font-size: 0.9rem;
-      display: none;
+      background: #140000; border: 1px solid #ff333333;
+      border-radius: 8px; color: #ff8888;
+      padding: 0.8rem 1rem; margin-top: 1.5rem;
+      font-size: 0.88rem; display: none; line-height: 1.5;
     }
     .footer {
-      text-align: center;
-      margin-top: 2.5rem;
-      color: #555;
-      font-size: 0.85rem;
+      text-align: center; margin-top: 2.5rem;
+      color: #444; font-size: 0.82rem;
     }
     .footer a { color: #00e5ff; text-decoration: none; }
     .footer a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>CodeVault AI</h1>
-    <p class="subtitle">AI-powered code evaluation — get scored on correctness, performance, and edge cases</p>
+<div class="container">
+  <h1>CodeVault AI</h1>
+  <p class="subtitle">AI-powered code evaluation — scored on correctness, performance, and edge cases</p>
 
-    <div class="form-group">
-      <label for="language">Language</label>
-      <select id="language">
-        <option value="Python">Python</option>
-        <option value="JavaScript">JavaScript</option>
-        <option value="TypeScript">TypeScript</option>
-        <option value="Go">Go</option>
-        <option value="Java">Java</option>
-        <option value="Rust">Rust</option>
-      </select>
-    </div>
+  <div class="api-key-row">
+    <label for="apiKey">OpenRouter API Key</label>
+    <input type="password" id="apiKey" placeholder="sk-or-v1-..." autocomplete="off" />
+    <button onclick="saveKey()">Save</button>
+    <button onclick="clearKey()">Clear</button>
+  </div>
+  <p class="key-note">
+    Key is saved only in your browser (localStorage). Never sent anywhere except OpenRouter.
+    Get a free key at <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai/keys</a>.
+  </p>
 
-    <div class="form-group">
-      <label for="code">Paste your code</label>
-      <textarea id="code" placeholder="Paste your code here..."></textarea>
-    </div>
-
-    <div class="btn-row">
-      <button id="evaluateBtn">Evaluate with AI</button>
-      <button id="clearBtn">Clear</button>
-      <span id="status"></span>
-    </div>
-
-    <div id="alert" class="alert"></div>
-    <div id="results" class="results" style="display:none;"></div>
-
-    <div class="footer">
-      Built by <a href="https://linkedin.com/in/theprashantdev" target="_blank">Prashant Raj</a>
-      &nbsp;&middot;&nbsp;
-      <a href="https://github.com/theprashantdev" target="_blank">GitHub</a>
-    </div>
+  <div class="form-group">
+    <label for="language">Language</label>
+    <select id="language">
+      <option>Python</option>
+      <option>JavaScript</option>
+      <option>TypeScript</option>
+      <option>Go</option>
+      <option>Java</option>
+      <option>Rust</option>
+      <option>C++</option>
+    </select>
   </div>
 
-  <script>
-  const API_URL = 'https://ai-chat-backend-opal.vercel.app/api/evaluate';
-  const TIMEOUT_MS = 30000;
+  <div class="form-group">
+    <label for="code">Paste your code</label>
+    <textarea id="code" placeholder="Paste your code here..."></textarea>
+  </div>
 
-  const evaluateBtn = document.getElementById('evaluateBtn');
-  const clearBtn = document.getElementById('clearBtn');
-  const statusEl = document.getElementById('status');
-  const alertEl = document.getElementById('alert');
-  const resultsEl = document.getElementById('results');
+  <div class="btn-row">
+    <button class="primary" id="evalBtn" onclick="evaluate()">Evaluate with AI</button>
+    <button class="secondary" onclick="clearAll()">Clear</button>
+    <span id="status"></span>
+  </div>
 
-  function showAlert(msg) {
-    alertEl.textContent = msg;
-    alertEl.style.display = 'block';
+  <div id="alert" class="alert"></div>
+  <div id="results" class="results" style="display:none;"></div>
+
+  <div class="footer">
+    Built by <a href="https://linkedin.com/in/theprashantdev" target="_blank">Prashant Raj</a>
+    &nbsp;·&nbsp;
+    <a href="https://github.com/theprashantdev/codevault-ai" target="_blank">GitHub</a>
+  </div>
+</div>
+
+<script>
+const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions';
+const MODEL = 'openai/gpt-4o-mini';
+
+const SYSTEM_PROMPT = `You are an expert code reviewer. Evaluate the given code snippet and return a JSON object with exactly this structure:
+{
+  "correctness": <number 0-100>,
+  "performance": <number 0-100>,
+  "edgeCases": <number 0-100>,
+  "overall": <number 0-100>,
+  "feedback": "<2-3 sentence summary of strengths and key issues>"
+}
+
+Scoring guide:
+- correctness: Does the code work correctly? Are there bugs or logic errors?
+- performance: Is it efficient? Time/space complexity, unnecessary operations?
+- edgeCases: Does it handle nulls, empty inputs, boundary values, error states?
+- overall: Weighted average reflecting overall code quality.
+
+Respond ONLY with the JSON object. No markdown, no explanation outside the JSON.`;
+
+function getKey() { return localStorage.getItem('codevault_api_key') || ''; }
+function saveKey() {
+  const k = document.getElementById('apiKey').value.trim();
+  if (!k) { showAlert('Please enter your API key first.'); return; }
+  localStorage.setItem('codevault_api_key', k);
+  document.getElementById('apiKey').value = k;
+  showAlert('✓ API key saved in your browser.');
+  document.getElementById('alert').style.color = '#00e5ff';
+}
+function clearKey() {
+  localStorage.removeItem('codevault_api_key');
+  document.getElementById('apiKey').value = '';
+  showAlert('API key cleared.');
+}
+function clearAll() {
+  document.getElementById('code').value = '';
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('results').innerHTML = '';
+  hideAlert();
+  document.getElementById('status').textContent = '';
+}
+
+window.addEventListener('load', () => {
+  const k = getKey();
+  if (k) document.getElementById('apiKey').value = k;
+});
+
+function showAlert(msg) {
+  const el = document.getElementById('alert');
+  el.textContent = msg;
+  el.style.color = '#ff8888';
+  el.style.display = 'block';
+}
+function hideAlert() { document.getElementById('alert').style.display = 'none'; }
+function setStatus(msg) { document.getElementById('status').textContent = msg; }
+
+async function evaluate() {
+  hideAlert();
+  const code = document.getElementById('code').value.trim();
+  const language = document.getElementById('language').value;
+  const apiKey = document.getElementById('apiKey').value.trim() || getKey();
+
+  if (!apiKey) {
+    showAlert('Please enter your OpenRouter API key above. Get one free at openrouter.ai/keys');
+    return;
   }
+  if (!code) { showAlert('Please paste some code first.'); return; }
+  if (code.length > 20000) { showAlert('Code too long — please limit to 20,000 characters.'); return; }
 
-  function hideAlert() {
-    alertEl.style.display = 'none';
-  }
+  const btn = document.getElementById('evalBtn');
+  btn.disabled = true;
+  btn.textContent = 'Evaluating…';
+  setStatus('Calling OpenRouter…');
 
-  function setStatus(msg) {
-    statusEl.textContent = msg;
-  }
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 30000);
 
-  function setLoading(loading) {
-    evaluateBtn.disabled = loading;
-    clearBtn.disabled = loading;
-    evaluateBtn.textContent = loading ? 'Evaluating…' : 'Evaluate with AI';
-    if (!loading) setStatus('');
-  }
+  try {
+    const res = await fetch(OPENROUTER_URL, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+        'HTTP-Referer': 'https://codevault-ai-nu.vercel.app',
+        'X-Title': 'CodeVault AI',
+      },
+      body: JSON.stringify({
+        model: MODEL,
+        messages: [
+          { role: 'system', content: SYSTEM_PROMPT },
+          { role: 'user', content: `Language: ${language}\n\nCode:\n${code}` }
+        ],
+        response_format: { type: 'json_object' },
+        temperature: 0.1,
+      }),
+      signal: controller.signal,
+    });
+    clearTimeout(timer);
 
-  clearBtn.addEventListener('click', () => {
-    document.getElementById('code').value = '';
-    resultsEl.style.display = 'none';
-    resultsEl.innerHTML = '';
-    hideAlert();
-    setStatus('');
-  });
-
-  evaluateBtn.addEventListener('click', async () => {
-    const code = document.getElementById('code').value.trim();
-    const language = document.getElementById('language').value;
-
-    hideAlert();
-    if (!code) { showAlert('Please paste some code before evaluating.'); return; }
-    if (code.length > 20000) { showAlert('Code is too long. Please limit to 20,000 characters.'); return; }
-
-    setLoading(true);
-    setStatus('Sending to AI…');
-
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
-
-    try {
-      const res = await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code, language }),
-        signal: controller.signal,
-      });
-      clearTimeout(timer);
-
-      if (!res.ok) {
-        let errMsg = `Server error (${res.status})`;
-        try {
-          const errData = await res.json();
-          if (errData.error) errMsg = errData.error;
-        } catch (_) {}
-        showAlert('Evaluation failed: ' + errMsg);
-        return;
-      }
-
-      const data = await res.json();
-      if (!data.results || !Array.isArray(data.results)) {
-        showAlert('Unexpected response from server. Please try again.');
-        return;
-      }
-      displayResults(data.results);
-
-    } catch (err) {
-      clearTimeout(timer);
-      if (err.name === 'AbortError') {
-        showAlert('Request timed out after 30 seconds. The evaluation server may be busy — please try again.');
-      } else {
-        showAlert('Could not reach the evaluation server. Check your internet connection and try again.');
-      }
-    } finally {
-      setLoading(false);
+    if (res.status === 401) {
+      showAlert('Invalid API key. Please check your OpenRouter key and try again.');
+      return;
     }
-  });
+    if (res.status === 402) {
+      showAlert('OpenRouter account has no credits. Add credits at openrouter.ai or use a free model.');
+      return;
+    }
+    if (!res.ok) {
+      showAlert(`OpenRouter error (${res.status}). Please try again.`);
+      return;
+    }
 
-  function scoreColor(score) {
-    if (score >= 80) return '#00e5ff';
-    if (score >= 50) return '#ffaa00';
-    return '#ff5555';
+    const data = await res.json();
+    const content = data?.choices?.[0]?.message?.content;
+    if (!content) { showAlert('Empty response from AI. Please try again.'); return; }
+
+    let result;
+    try { result = JSON.parse(content); }
+    catch (_) { showAlert('Could not parse AI response. Please try again.'); return; }
+
+    displayResult(result, language);
+
+  } catch (err) {
+    clearTimeout(timer);
+    if (err.name === 'AbortError') {
+      showAlert('Request timed out after 30 seconds. Please try again.');
+    } else {
+      showAlert('Network error. Check your internet connection and try again.');
+    }
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Evaluate with AI';
+    setStatus('');
   }
+}
 
-  function displayResults(results) {
-    resultsEl.style.display = 'grid';
-    resultsEl.innerHTML = results.map(r => {
-      const modelName = r.model ? r.model.split('/').pop().replace(' (static)', '') : 'Model';
-      if (r.error) {
-        return `
-          <div class="card error-card">
-            <h3>${modelName}</h3>
-            <p class="error-text">⚠️ ${r.error}</p>
-          </div>`;
-      }
-      const scores = [
-        { label: 'Correctness', val: r.correctness ?? 0 },
-        { label: 'Performance', val: r.performance ?? 0 },
-        { label: 'Edge Cases',  val: r.edgeCases   ?? 0 },
-      ];
-      const scoreRows = scores.map(s => `
+function scoreColor(v) {
+  if (v >= 80) return '#00e5ff';
+  if (v >= 55) return '#ffaa00';
+  return '#ff5555';
+}
+
+function displayResult(r, language) {
+  const overall = r.overall ?? Math.round(((r.correctness||0)+(r.performance||0)+(r.edgeCases||0))/3);
+  const resultsEl = document.getElementById('results');
+  resultsEl.style.display = 'grid';
+  resultsEl.innerHTML = `
+    <div class="card">
+      <h3>gpt-4o-mini · ${language}</h3>
+      <div class="overall-score" style="color:${scoreColor(overall)}">${overall}<span style="font-size:1rem;color:#666">/100</span></div>
+      ${[['Correctness', r.correctness??0],['Performance', r.performance??0],['Edge Cases', r.edgeCases??0]].map(([label,val]) => `
         <div class="score-row">
-          <span class="score-label">${s.label}</span>
-          <div class="score-bar-bg"><div class="score-bar" style="width:${s.val}%;background:${scoreColor(s.val)}"></div></div>
-          <span class="score-val">${s.val}</span>
-        </div>`).join('');
-      return `
-        <div class="card">
-          <h3>${modelName}</h3>
-          ${scoreRows}
-          ${r.feedback ? `<p class="feedback">${r.feedback}</p>` : ''}
-        </div>`;
-    }).join('');
-  }
-  </script>
+          <span class="score-label">${label}</span>
+          <div class="score-bar-bg"><div class="score-bar" style="width:${val}%;background:${scoreColor(val)}"></div></div>
+          <span class="score-val">${val}</span>
+        </div>`).join('')}
+      ${r.feedback ? `<p class="feedback">${r.feedback}</p>` : ''}
+    </div>`;
+}
+</script>
 </body>
 </html>
