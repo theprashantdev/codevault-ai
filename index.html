@@ -20,11 +20,17 @@
     h1 {
       text-align: center;
       color: #00e5ff;
-      margin-bottom: 2rem;
+      margin-bottom: 0.5rem;
       font-size: 2.5rem;
     }
+    .subtitle {
+      text-align: center;
+      color: #888;
+      margin-bottom: 2rem;
+      font-size: 0.95rem;
+    }
     .form-group { margin-bottom: 1rem; }
-    label { display: block; margin-bottom: 0.5rem; color: #aaa; }
+    label { display: block; margin-bottom: 0.5rem; color: #aaa; font-size: 0.9rem; }
     select, textarea {
       width: 100%;
       background: #111;
@@ -35,9 +41,12 @@
       font-family: monospace;
       font-size: 0.9rem;
       outline: none;
+      transition: border-color 0.2s;
     }
+    select:focus, textarea:focus { border-color: #00e5ff; }
     select { font-family: 'Segoe UI', sans-serif; }
-    textarea { height: 200px; resize: vertical; }
+    textarea { height: 220px; resize: vertical; }
+    .btn-row { display: flex; gap: 0.75rem; align-items: center; }
     button {
       background: #00e5ff;
       color: #000;
@@ -47,10 +56,19 @@
       border-radius: 8px;
       cursor: pointer;
       font-size: 1rem;
-      transition: transform 0.2s;
+      transition: transform 0.15s, opacity 0.15s;
     }
-    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    button:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
     button:hover:not(:disabled) { transform: scale(1.02); }
+    #clearBtn {
+      background: transparent;
+      color: #888;
+      border: 1px solid #333;
+      padding: 0.8rem 1.2rem;
+      font-size: 0.9rem;
+    }
+    #clearBtn:hover:not(:disabled) { border-color: #555; color: #ccc; transform: none; }
+    #status { color: #888; font-size: 0.85rem; margin-left: 0.5rem; }
     .results {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -62,89 +80,216 @@
       border: 1px solid #00e5ff44;
       border-radius: 12px;
       padding: 1.2rem;
+      transition: border-color 0.2s;
     }
-    .card h3 { color: #00e5ff; margin-bottom: 0.5rem; }
-    .card p { margin: 0.3rem 0; font-size: 0.9rem; }
-    .error { color: #ff5555; }
+    .card:hover { border-color: #00e5ff88; }
+    .card h3 { color: #00e5ff; margin-bottom: 0.75rem; font-size: 1rem; }
+    .score-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 0.3rem 0;
+      font-size: 0.88rem;
+    }
+    .score-label { color: #aaa; }
+    .score-bar-bg {
+      flex: 1;
+      height: 6px;
+      background: #222;
+      border-radius: 3px;
+      margin: 0 0.6rem;
+      overflow: hidden;
+    }
+    .score-bar { height: 100%; border-radius: 3px; background: #00e5ff; transition: width 0.4s ease; }
+    .score-val { color: #fff; min-width: 32px; text-align: right; font-weight: 600; }
+    .feedback { color: #ccc; font-size: 0.82rem; margin-top: 0.75rem; line-height: 1.5; border-top: 1px solid #1a1a1a; padding-top: 0.6rem; }
+    .error-card { border-color: #ff555566; }
+    .error-card h3 { color: #ff8888; }
+    .error-text { color: #ff7777; font-size: 0.85rem; margin-top: 0.4rem; }
+    .alert {
+      background: #1a0000;
+      border: 1px solid #ff444444;
+      border-radius: 8px;
+      color: #ff8888;
+      padding: 0.75rem 1rem;
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      display: none;
+    }
     .footer {
       text-align: center;
-      margin-top: 2rem;
-      color: #666;
+      margin-top: 2.5rem;
+      color: #555;
+      font-size: 0.85rem;
     }
-    .footer a { color: #00e5ff; }
+    .footer a { color: #00e5ff; text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>CodeVault AI</h1>
+    <p class="subtitle">AI-powered code evaluation — get scored on correctness, performance, and edge cases</p>
+
     <div class="form-group">
       <label for="language">Language</label>
       <select id="language">
-        <option>Python</option>
-        <option>JavaScript</option>
-        <option>TypeScript</option>
-        <option>Go</option>
+        <option value="Python">Python</option>
+        <option value="JavaScript">JavaScript</option>
+        <option value="TypeScript">TypeScript</option>
+        <option value="Go">Go</option>
+        <option value="Java">Java</option>
+        <option value="Rust">Rust</option>
       </select>
     </div>
+
     <div class="form-group">
       <label for="code">Paste your code</label>
       <textarea id="code" placeholder="Paste your code here..."></textarea>
     </div>
-    <button id="evaluateBtn">Evaluate with AI</button>
 
-    <div id="results" class="results" style="display: none;"></div>
+    <div class="btn-row">
+      <button id="evaluateBtn">Evaluate with AI</button>
+      <button id="clearBtn">Clear</button>
+      <span id="status"></span>
+    </div>
+
+    <div id="alert" class="alert"></div>
+    <div id="results" class="results" style="display:none;"></div>
 
     <div class="footer">
-      Built by <a href="https://linkedin.com/in/theprashantdev" target="_blank">Prashant Raj</a> · Full-Stack AI Developer
+      Built by <a href="https://linkedin.com/in/theprashantdev" target="_blank">Prashant Raj</a>
+      &nbsp;&middot;&nbsp;
+      <a href="https://github.com/theprashantdev" target="_blank">GitHub</a>
     </div>
   </div>
 
   <script>
   const API_URL = 'https://ai-chat-backend-opal.vercel.app/api/evaluate';
+  const TIMEOUT_MS = 30000;
 
-  document.getElementById('evaluateBtn').addEventListener('click', async () => {
+  const evaluateBtn = document.getElementById('evaluateBtn');
+  const clearBtn = document.getElementById('clearBtn');
+  const statusEl = document.getElementById('status');
+  const alertEl = document.getElementById('alert');
+  const resultsEl = document.getElementById('results');
+
+  function showAlert(msg) {
+    alertEl.textContent = msg;
+    alertEl.style.display = 'block';
+  }
+
+  function hideAlert() {
+    alertEl.style.display = 'none';
+  }
+
+  function setStatus(msg) {
+    statusEl.textContent = msg;
+  }
+
+  function setLoading(loading) {
+    evaluateBtn.disabled = loading;
+    clearBtn.disabled = loading;
+    evaluateBtn.textContent = loading ? 'Evaluating…' : 'Evaluate with AI';
+    if (!loading) setStatus('');
+  }
+
+  clearBtn.addEventListener('click', () => {
+    document.getElementById('code').value = '';
+    resultsEl.style.display = 'none';
+    resultsEl.innerHTML = '';
+    hideAlert();
+    setStatus('');
+  });
+
+  evaluateBtn.addEventListener('click', async () => {
     const code = document.getElementById('code').value.trim();
     const language = document.getElementById('language').value;
-    if (!code) return alert('Please paste some code.');
 
-    const btn = document.getElementById('evaluateBtn');
-    btn.disabled = true;
-    btn.textContent = 'Evaluating...';
+    hideAlert();
+    if (!code) { showAlert('Please paste some code before evaluating.'); return; }
+    if (code.length > 20000) { showAlert('Code is too long. Please limit to 20,000 characters.'); return; }
+
+    setLoading(true);
+    setStatus('Sending to AI…');
+
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
     try {
       const res = await fetch(API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code, language })
+        body: JSON.stringify({ code, language }),
+        signal: controller.signal,
       });
-      const data = await res.json();
-      if (res.ok) {
-        displayResults(data.results);
-      } else {
-        alert('Error: ' + data.error);
+      clearTimeout(timer);
+
+      if (!res.ok) {
+        let errMsg = `Server error (${res.status})`;
+        try {
+          const errData = await res.json();
+          if (errData.error) errMsg = errData.error;
+        } catch (_) {}
+        showAlert('Evaluation failed: ' + errMsg);
+        return;
       }
+
+      const data = await res.json();
+      if (!data.results || !Array.isArray(data.results)) {
+        showAlert('Unexpected response from server. Please try again.');
+        return;
+      }
+      displayResults(data.results);
+
     } catch (err) {
-      alert('Could not reach evaluation server.');
+      clearTimeout(timer);
+      if (err.name === 'AbortError') {
+        showAlert('Request timed out after 30 seconds. The evaluation server may be busy — please try again.');
+      } else {
+        showAlert('Could not reach the evaluation server. Check your internet connection and try again.');
+      }
     } finally {
-      btn.disabled = false;
-      btn.textContent = 'Evaluate with AI';
+      setLoading(false);
     }
   });
 
-  function displayResults(results) {
-    const container = document.getElementById('results');
-    container.style.display = 'grid';
-    container.innerHTML = results.map(r => `
-      <div class="card">
-        <h3>${r.model ? r.model.split('/').pop().replace(' (static)', '') : 'Model'}</h3>
-        ${r.error ? `<p class="error">⚠️ ${r.error}</p>` : ''}
-        <p>Correctness: ${r.correctness}/100</p>
-        <p>Performance: ${r.performance}/100</p>
-        <p>Edge Cases: ${r.edgeCases}/100</p>
-        <p><small>${r.feedback || ''}</small></p>
-      </div>
-    `).join('');
+  function scoreColor(score) {
+    if (score >= 80) return '#00e5ff';
+    if (score >= 50) return '#ffaa00';
+    return '#ff5555';
   }
-</script>
+
+  function displayResults(results) {
+    resultsEl.style.display = 'grid';
+    resultsEl.innerHTML = results.map(r => {
+      const modelName = r.model ? r.model.split('/').pop().replace(' (static)', '') : 'Model';
+      if (r.error) {
+        return `
+          <div class="card error-card">
+            <h3>${modelName}</h3>
+            <p class="error-text">⚠️ ${r.error}</p>
+          </div>`;
+      }
+      const scores = [
+        { label: 'Correctness', val: r.correctness ?? 0 },
+        { label: 'Performance', val: r.performance ?? 0 },
+        { label: 'Edge Cases',  val: r.edgeCases   ?? 0 },
+      ];
+      const scoreRows = scores.map(s => `
+        <div class="score-row">
+          <span class="score-label">${s.label}</span>
+          <div class="score-bar-bg"><div class="score-bar" style="width:${s.val}%;background:${scoreColor(s.val)}"></div></div>
+          <span class="score-val">${s.val}</span>
+        </div>`).join('');
+      return `
+        <div class="card">
+          <h3>${modelName}</h3>
+          ${scoreRows}
+          ${r.feedback ? `<p class="feedback">${r.feedback}</p>` : ''}
+        </div>`;
+    }).join('');
+  }
+  </script>
 </body>
 </html>

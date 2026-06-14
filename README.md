@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CodeVault AI
 
-## Getting Started
+> AI-powered code evaluation tool. Paste your code, pick a language, and get scored on correctness, performance, and edge case handling.
 
-First, run the development server:
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-codevault--ai--nu.vercel.app-00e5ff?style=flat-square)](https://codevault-ai-nu.vercel.app/)
+[![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
+
+## What It Does
+
+Submit any code snippet and receive an AI evaluation across three dimensions:
+- **Correctness** — Does the code do what it's supposed to do? Are there bugs?
+- **Performance** — Is it efficient? Any obvious bottlenecks or algorithmic issues?
+- **Edge Cases** — Does it handle empty inputs, nulls, large values, and boundary conditions?
+
+Each dimension is scored 0–100 with a visual progress bar and a feedback summary.
+
+## Live Demo
+
+**[codevault-ai-nu.vercel.app](https://codevault-ai-nu.vercel.app/)**
+
+## Supported Languages
+
+- Python
+- JavaScript
+- TypeScript
+- Go
+- Java
+- Rust
+
+## How to Run Locally
+
+This is a pure frontend — no build step, no dependencies.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/theprashantdev/codevault-ai
+cd codevault-ai
+# Open index.html in any browser
+open index.html
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Or serve with any static server:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npx serve .
+# or
+python -m http.server 8080
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Architecture
 
-## Learn More
+Single-file frontend. The evaluation logic runs on a backend API hosted separately:
 
-To learn more about Next.js, take a look at the following resources:
+```
+Browser (index.html)
+       |
+       | POST /api/evaluate
+       | { code, language }
+       v
+Evaluation API (Vercel)
+       |
+       | OpenRouter LLM call
+       v
+{ results: [{ model, correctness, performance, edgeCases, feedback }] }
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The frontend handles:
+- 30-second request timeout with abort controller
+- Non-2xx HTTP responses with error messages from server
+- Network failures with user-friendly text
+- Input length validation (20,000 char limit)
+- Score visualization with color-coded progress bars
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## License
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT © [Prashant Raj](https://github.com/theprashantdev)
