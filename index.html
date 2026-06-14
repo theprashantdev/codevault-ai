@@ -3,419 +3,409 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CodeVault AI — Smart Code Evaluator</title>
+<title>CodeVault AI — Advanced Code Analyzer</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{
-  background:#050508;
-  font-family:'Segoe UI',system-ui,sans-serif;
-  color:#e0e0e0;
-  min-height:100vh;
-}
-.topbar{
-  background:#0a0a10;
-  border-bottom:1px solid #00e5ff18;
-  padding:0.85rem 2rem;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  position:sticky;top:0;z-index:100;
-}
-.brand{color:#00e5ff;font-size:1.2rem;font-weight:700;letter-spacing:0.5px}
-.brand span{color:#fff;font-weight:400}
-.topbar-right{display:flex;gap:0.6rem;align-items:center}
-.badge{
-  background:#00e5ff15;color:#00e5ff;
-  border:1px solid #00e5ff33;
-  padding:0.25rem 0.7rem;
-  border-radius:20px;font-size:0.75rem;
-}
-.main{max-width:1100px;margin:0 auto;padding:2rem 1.5rem}
-/* Setup banner */
-#setupBanner{
-  background:linear-gradient(135deg,#0d1a20,#071215);
-  border:1px solid #00e5ff44;
-  border-radius:12px;
-  padding:1.5rem;
-  margin-bottom:1.5rem;
-  display:none;
-}
-#setupBanner h2{color:#00e5ff;margin-bottom:0.5rem;font-size:1.1rem}
-#setupBanner p{color:#888;font-size:0.85rem;margin-bottom:1rem;line-height:1.6}
-.key-input-row{display:flex;gap:0.6rem}
-.key-input-row input{
-  flex:1;background:#0a0f14;
-  border:1px solid #00e5ff44;
-  border-radius:8px;padding:0.7rem 1rem;
-  color:#fff;font-size:0.9rem;font-family:monospace;outline:none;
-}
-.key-input-row input:focus{border-color:#00e5ff}
-.btn-cyan{
-  background:#00e5ff;color:#000;
-  border:none;padding:0.7rem 1.4rem;
-  font-weight:700;border-radius:8px;
-  cursor:pointer;font-size:0.9rem;
-  white-space:nowrap;
-  transition:opacity 0.15s;
-}
-.btn-cyan:hover{opacity:0.88}
-.btn-cyan:disabled{opacity:0.4;cursor:not-allowed}
-.key-hint{color:#555;font-size:0.78rem;margin-top:0.5rem}
-.key-hint a{color:#00e5ff88;text-decoration:none}
-.key-hint a:hover{color:#00e5ff}
-/* Key status bar */
-#keyStatus{
-  display:none;
-  background:#060e0f;
-  border:1px solid #00e5ff22;
-  border-radius:8px;
-  padding:0.6rem 1rem;
-  margin-bottom:1.5rem;
-  display:flex;align-items:center;justify-content:space-between;
-  font-size:0.83rem;
-}
-#keyStatus .ks-left{color:#888}
-#keyStatus .ks-left span{color:#00e5ff}
-#keyStatus .ks-right{display:flex;gap:0.5rem}
-.btn-ghost{
-  background:transparent;color:#666;
-  border:1px solid #222;padding:0.3rem 0.8rem;
-  border-radius:6px;cursor:pointer;font-size:0.8rem;
-  transition:border-color 0.15s,color 0.15s;
-}
-.btn-ghost:hover{border-color:#444;color:#aaa}
-/* Editor area */
-.editor-panel{
-  background:#0a0a10;
-  border:1px solid #1a1a2e;
-  border-radius:12px;
-  overflow:hidden;
-  margin-bottom:1.5rem;
-}
-.editor-toolbar{
-  background:#0d0d18;
-  border-bottom:1px solid #1a1a2e;
-  padding:0.6rem 1rem;
-  display:flex;gap:0.6rem;align-items:center;
-  flex-wrap:wrap;
-}
-.editor-toolbar label{color:#666;font-size:0.82rem}
-select.lang-select{
-  background:#111120;border:1px solid #00e5ff33;
-  border-radius:6px;color:#fff;
-  padding:0.35rem 0.7rem;font-size:0.85rem;
-  outline:none;cursor:pointer;
-}
-select.lang-select:focus{border-color:#00e5ff}
-.toolbar-right{margin-left:auto;display:flex;gap:0.5rem;align-items:center}
-#charCount{color:#444;font-size:0.78rem}
-textarea#code{
-  width:100%;height:280px;
-  background:#07070f;
-  border:none;outline:none;
-  color:#e0e0e0;
-  font-family:'Cascadia Code','Fira Code',Consolas,monospace;
-  font-size:0.9rem;
-  padding:1.2rem;
-  resize:vertical;
-  line-height:1.6;
-  tab-size:4;
-}
-textarea#code::placeholder{color:#333}
-/* Action bar */
-.action-bar{
-  display:flex;gap:0.75rem;align-items:center;
-  margin-bottom:2rem;flex-wrap:wrap;
-}
-#analyzeBtn{
-  background:linear-gradient(135deg,#00e5ff,#0099bb);
-  color:#000;border:none;
-  padding:0.85rem 2.5rem;
-  font-weight:700;border-radius:8px;
-  cursor:pointer;font-size:1rem;
-  transition:transform 0.15s,opacity 0.15s;
-  letter-spacing:0.3px;
-}
+body{background:#04040a;font-family:'Segoe UI',system-ui,sans-serif;color:#e0e0e0;min-height:100vh}
+
+/* ── TOP BAR ─────────────────────────────── */
+.topbar{background:#070710;border-bottom:1px solid #00e5ff18;padding:.8rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;backdrop-filter:blur(8px)}
+.brand{display:flex;align-items:center;gap:.6rem}
+.brand-icon{width:28px;height:28px;background:linear-gradient(135deg,#00e5ff,#0077aa);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:900;color:#000}
+.brand-text{color:#fff;font-size:1.1rem;font-weight:700;letter-spacing:.3px}.brand-text span{color:#00e5ff}
+.topbar-pills{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+.pill{background:#00e5ff12;color:#00e5ff;border:1px solid #00e5ff2a;padding:.2rem .65rem;border-radius:20px;font-size:.75rem;white-space:nowrap}
+.pill.green{background:#00ff8812;color:#00ff88;border-color:#00ff882a}
+.pill.amber{background:#ffaa0012;color:#ffaa00;border-color:#ffaa002a}
+
+/* ── MAIN ─────────────────────────────────── */
+.main{max-width:1140px;margin:0 auto;padding:2rem 1.5rem}
+
+/* ── API KEY SETUP ───────────────────────── */
+#setupBanner{background:linear-gradient(135deg,#0b1820,#060e14);border:1px solid #00e5ff55;border-radius:14px;padding:1.6rem;margin-bottom:1.5rem;display:none}
+#setupBanner h2{color:#00e5ff;font-size:1rem;margin-bottom:.4rem;display:flex;align-items:center;gap:.5rem}
+#setupBanner p{color:#888;font-size:.84rem;line-height:1.65;margin-bottom:1rem}
+.key-row{display:flex;gap:.6rem}
+.key-row input{flex:1;background:#070d12;border:1px solid #00e5ff3a;border-radius:8px;padding:.7rem 1rem;color:#fff;font-size:.9rem;font-family:monospace;outline:none;transition:border-color .15s}
+.key-row input:focus{border-color:#00e5ff}
+.btn-primary{background:linear-gradient(135deg,#00e5ff,#009dbb);color:#000;border:none;padding:.7rem 1.5rem;font-weight:700;border-radius:8px;cursor:pointer;font-size:.88rem;white-space:nowrap;transition:opacity .15s,transform .1s}
+.btn-primary:hover{opacity:.88;transform:translateY(-1px)}
+.btn-primary:disabled{opacity:.35;cursor:not-allowed;transform:none}
+.key-hint{color:#555;font-size:.77rem;margin-top:.5rem}.key-hint a{color:#00e5ff77;text-decoration:none}.key-hint a:hover{color:#00e5ff}
+
+/* ── KEY STATUS BAR ─────────────────────── */
+#keyBar{background:#06060f;border:1px solid #00e5ff1a;border-radius:8px;padding:.6rem 1rem;margin-bottom:1.5rem;display:none;align-items:center;justify-content:space-between;font-size:.82rem}
+#keyBar .kl{color:#555}#keyBar .kl span{color:#00e5ff;font-family:monospace}
+.btn-ghost{background:transparent;color:#555;border:1px solid #1e1e2a;padding:.28rem .75rem;border-radius:6px;cursor:pointer;font-size:.78rem;transition:border-color .15s,color .15s}
+.btn-ghost:hover{border-color:#333;color:#aaa}
+
+/* ── TABS ───────────────────────────────── */
+.tabs{display:flex;gap:0;border-bottom:1px solid #111120;margin-bottom:1.5rem}
+.tab{padding:.7rem 1.3rem;cursor:pointer;font-size:.87rem;color:#555;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;white-space:nowrap}
+.tab:hover{color:#aaa}
+.tab.active{color:#00e5ff;border-bottom-color:#00e5ff}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* ── EDITOR PANEL ───────────────────────── */
+.editor-panel{background:#080812;border:1px solid #141428;border-radius:12px;overflow:hidden;margin-bottom:1.2rem}
+.editor-top{background:#0b0b1a;border-bottom:1px solid #141428;padding:.55rem 1rem;display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
+.editor-top label{color:#555;font-size:.8rem}
+select.sel{background:#0e0e1e;border:1px solid #00e5ff2a;border-radius:6px;color:#ddd;padding:.32rem .65rem;font-size:.82rem;outline:none;cursor:pointer;transition:border-color .15s}
+select.sel:focus{border-color:#00e5ff}
+.editor-right{margin-left:auto;display:flex;gap:.45rem;align-items:center}
+#charCnt{color:#333;font-size:.76rem}
+#lineCount{color:#333;font-size:.76rem}
+textarea#code{width:100%;height:300px;background:#04040c;border:none;outline:none;color:#ddd;font-family:'Cascadia Code','Fira Code','Courier New',monospace;font-size:.88rem;padding:1.1rem 1.2rem;resize:vertical;line-height:1.65;tab-size:2}
+textarea#code::placeholder{color:#222}
+
+/* ── ACTION BAR ─────────────────────────── */
+.action-bar{display:flex;gap:.75rem;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap}
+#analyzeBtn{background:linear-gradient(135deg,#00e5ff,#0099bb);color:#000;border:none;padding:.85rem 2.2rem;font-weight:800;border-radius:9px;cursor:pointer;font-size:.95rem;letter-spacing:.3px;transition:transform .15s,opacity .15s}
 #analyzeBtn:hover:not(:disabled){transform:translateY(-1px)}
-#analyzeBtn:disabled{opacity:0.4;cursor:not-allowed;transform:none}
-.btn-secondary{
-  background:transparent;color:#888;
-  border:1px solid #222;
-  padding:0.85rem 1.4rem;
-  border-radius:8px;cursor:pointer;
-  font-size:0.9rem;
-  transition:border-color 0.15s,color 0.15s;
-}
-.btn-secondary:hover{border-color:#444;color:#ccc}
-#spinner{
-  display:none;
-  width:20px;height:20px;
-  border:2px solid #00e5ff33;
-  border-top-color:#00e5ff;
-  border-radius:50%;
-  animation:spin 0.8s linear infinite;
-}
+#analyzeBtn:disabled{opacity:.35;cursor:not-allowed;transform:none}
+.spinner{width:18px;height:18px;border:2px solid #00e5ff22;border-top-color:#00e5ff;border-radius:50%;animation:spin .75s linear infinite;display:none}
 @keyframes spin{to{transform:rotate(360deg)}}
-#statusMsg{color:#666;font-size:0.85rem}
-/* Alert */
-.alert{
-  background:#140007;
-  border:1px solid #ff333344;
-  border-radius:8px;
-  color:#ff8888;
-  padding:0.85rem 1rem;
-  margin-bottom:1.5rem;
-  font-size:0.88rem;
-  display:none;
-  line-height:1.5;
-}
-/* Results */
-#results{display:none}
-.results-header{
-  display:flex;align-items:center;
-  justify-content:space-between;
-  margin-bottom:1.2rem;
-}
-.results-header h2{color:#fff;font-size:1.1rem}
-.overall-pill{
-  background:#00e5ff15;
-  border:1px solid #00e5ff33;
-  border-radius:20px;
-  padding:0.3rem 0.9rem;
-  font-size:0.85rem;
-  color:#00e5ff;
-  font-weight:700;
-}
-.score-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-  gap:1rem;
-  margin-bottom:1.5rem;
-}
-.score-card{
-  background:#0a0a14;
-  border:1px solid #1a1a2e;
-  border-radius:10px;
-  padding:1rem;
-  text-align:center;
-}
-.score-card .sc-label{color:#888;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:0.5rem}
-.score-card .sc-val{
-  font-size:2.2rem;
-  font-weight:800;
-  line-height:1;
-  margin-bottom:0.4rem;
-}
-.score-card .sc-bar-bg{
-  height:4px;background:#111;
-  border-radius:2px;overflow:hidden;
-}
-.score-card .sc-bar{
-  height:100%;border-radius:2px;
-  transition:width 0.6s ease;
-}
-.sc-good{color:#00e5ff}
-.sc-mid{color:#ffaa00}
-.sc-bad{color:#ff5555}
-.feedback-box{
-  background:#0a0a14;
-  border:1px solid #1a1a2e;
-  border-radius:10px;
-  padding:1.2rem 1.4rem;
-  margin-bottom:1.5rem;
-}
-.feedback-box h3{color:#00e5ff;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:0.8rem}
-.feedback-box p{color:#bbb;font-size:0.9rem;line-height:1.7}
-.issues-box{
-  background:#0a0a14;
-  border:1px solid #1a1a2e;
-  border-radius:10px;
-  padding:1.2rem 1.4rem;
-  margin-bottom:1.5rem;
-}
-.issues-box h3{color:#00e5ff;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:0.8rem}
-.issue-item{
-  display:flex;gap:0.8rem;
-  padding:0.6rem 0;
-  border-bottom:1px solid #111118;
-  align-items:flex-start;
-}
-.issue-item:last-child{border-bottom:none}
-.issue-tag{
-  font-size:0.72rem;font-weight:700;
-  padding:0.2rem 0.5rem;
-  border-radius:4px;
-  white-space:nowrap;
-  margin-top:2px;
-}
-.tag-bug{background:#ff555520;color:#ff7777;border:1px solid #ff555533}
-.tag-security{background:#ff880020;color:#ffaa44;border:1px solid #ff880033}
-.tag-perf{background:#8855ff20;color:#aa88ff;border:1px solid #8855ff33}
-.tag-style{background:#44aaff20;color:#66bbff;border:1px solid #44aaff33}
-.tag-info{background:#00e5ff15;color:#00e5ff;border:1px solid #00e5ff33}
-.issue-text{color:#ccc;font-size:0.87rem;line-height:1.5}
-/* Suggestions */
-.suggestions-box{
-  background:#0a0a14;
-  border:1px solid #1a1a2e;
-  border-radius:10px;
-  padding:1.2rem 1.4rem;
-  margin-bottom:1.5rem;
-}
-.suggestions-box h3{color:#00e5ff;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:0.8rem}
-.suggestion-item{
-  color:#bbb;font-size:0.87rem;
-  padding:0.4rem 0;
-  border-bottom:1px solid #111118;
-  line-height:1.5;
-}
-.suggestion-item:last-child{border-bottom:none}
-.suggestion-item::before{content:"→ ";color:#00e5ff88}
-/* History */
-.history-section{margin-top:2.5rem}
-.history-section h2{color:#666;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:1rem}
-.history-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-  gap:0.75rem;
-}
-.history-card{
-  background:#090912;
-  border:1px solid #15151f;
-  border-radius:8px;
-  padding:0.85rem;
-  cursor:pointer;
-  transition:border-color 0.15s;
-}
-.history-card:hover{border-color:#00e5ff33}
-.hc-top{display:flex;justify-content:space-between;margin-bottom:0.4rem}
-.hc-lang{color:#00e5ff;font-size:0.78rem;font-weight:600}
-.hc-score{color:#fff;font-size:0.78rem;font-weight:700}
-.hc-preview{color:#555;font-size:0.78rem;font-family:monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.hc-time{color:#444;font-size:0.72rem;margin-top:0.3rem}
-/* Footer */
-.footer{text-align:center;margin-top:3rem;padding:1.5rem;color:#333;font-size:0.82rem;border-top:1px solid #0d0d0d}
-.footer a{color:#00e5ff55;text-decoration:none}
-.footer a:hover{color:#00e5ff}
+#statusLine{color:#555;font-size:.82rem}
+
+/* ── ALERT ──────────────────────────────── */
+.alert{background:#0f0007;border:1px solid #ff333344;border-radius:8px;color:#ff8888;padding:.8rem 1rem;margin-bottom:1.2rem;font-size:.86rem;line-height:1.55;display:none}
+
+/* ── RESULTS ────────────────────────────── */
+#results{display:none;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.result-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;flex-wrap:wrap;gap:.5rem}
+.result-header h2{color:#fff;font-size:1rem;font-weight:700}
+.overall-badge{padding:.35rem 1rem;border-radius:20px;font-size:.85rem;font-weight:800;border:1px solid transparent}
+
+/* score cards */
+.score-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:.85rem;margin-bottom:1.2rem}
+.score-card{background:#080814;border:1px solid #13132a;border-radius:10px;padding:1rem;text-align:center;transition:border-color .2s}
+.score-card:hover{border-color:#00e5ff2a}
+.sc-lbl{color:#555;font-size:.76rem;text-transform:uppercase;letter-spacing:.8px;margin-bottom:.45rem}
+.sc-num{font-size:2.1rem;font-weight:900;line-height:1;margin-bottom:.45rem}
+.sc-bar-bg{height:3px;background:#0d0d1a;border-radius:2px;overflow:hidden}
+.sc-bar{height:100%;border-radius:2px;transition:width .7s cubic-bezier(.4,0,.2,1)}
+
+/* summary / issues / suggestions */
+.box{background:#080814;border:1px solid #13132a;border-radius:10px;padding:1.1rem 1.3rem;margin-bottom:1.1rem}
+.box h3{color:#00e5ff;font-size:.78rem;text-transform:uppercase;letter-spacing:.9px;margin-bottom:.75rem;display:flex;align-items:center;gap:.4rem}
+.box p,.box .desc{color:#bbb;font-size:.87rem;line-height:1.7}
+
+/* issues */
+.issue-row{display:flex;gap:.75rem;padding:.55rem 0;border-bottom:1px solid #0d0d1a;align-items:flex-start}
+.issue-row:last-child{border-bottom:none}
+.itag{font-size:.7rem;font-weight:700;padding:.18rem .48rem;border-radius:4px;white-space:nowrap;margin-top:3px}
+.itag.bug{background:#ff555518;color:#ff7777;border:1px solid #ff555530}
+.itag.security{background:#ff880018;color:#ffaa44;border:1px solid #ff880030}
+.itag.performance{background:#8855ff18;color:#aa88ff;border:1px solid #8855ff30}
+.itag.style,.itag.readability{background:#44aaff18;color:#66bbff;border:1px solid #44aaff30}
+.itag.info{background:#00e5ff12;color:#00e5ff;border:1px solid #00e5ff25}
+.issue-txt{color:#ccc;font-size:.85rem;line-height:1.55}
+
+/* suggestions */
+.sug-row{color:#bbb;font-size:.85rem;padding:.42rem 0;border-bottom:1px solid #0d0d1a;line-height:1.55}
+.sug-row:last-child{border-bottom:none}
+.sug-row::before{content:"→ ";color:#00e5ff66}
+
+/* complexity */
+.complexity-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.7rem}
+.cx-card{background:#06060f;border:1px solid #0f0f20;border-radius:8px;padding:.75rem;text-align:center}
+.cx-label{color:#555;font-size:.75rem;margin-bottom:.3rem}
+.cx-val{font-size:1.15rem;font-weight:700;color:#fff}
+
+/* ── HISTORY ─────────────────────────────── */
+.hist-section{margin-top:2rem}
+.hist-section h2{color:#444;font-size:.8rem;text-transform:uppercase;letter-spacing:.9px;margin-bottom:.9rem}
+.hist-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.65rem}
+.hcard{background:#07070f;border:1px solid #111120;border-radius:9px;padding:.85rem;cursor:pointer;transition:border-color .15s}
+.hcard:hover{border-color:#00e5ff2a}
+.hc-top{display:flex;justify-content:space-between;margin-bottom:.35rem}
+.hc-lang{color:#00e5ff;font-size:.76rem;font-weight:600}
+.hc-score{font-size:.76rem;font-weight:800}
+.hc-prev{color:#444;font-size:.76rem;font-family:monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hc-time{color:#333;font-size:.7rem;margin-top:.25rem}
+.hc-delete{color:#333;float:right;font-size:.7rem;margin-left:.5rem}
+.hc-delete:hover{color:#ff5555}
+
+/* ── FOOTER ─────────────────────────────── */
+.footer{text-align:center;margin-top:3rem;padding:1.5rem;color:#2a2a3a;font-size:.8rem;border-top:1px solid #0a0a12}
+.footer a{color:#00e5ff33;text-decoration:none}.footer a:hover{color:#00e5ff66}
 </style>
 </head>
 <body>
 
+<!-- TOP BAR -->
 <div class="topbar">
-  <div class="brand">CodeVault <span>AI</span></div>
-  <div class="topbar-right">
-    <span class="badge" id="modelBadge">gpt-4o-mini</span>
-    <span class="badge" id="historyBadge" style="cursor:pointer" onclick="scrollToHistory()">History: <span id="histCount">0</span></span>
+  <div class="brand">
+    <div class="brand-icon">CV</div>
+    <div class="brand-text">Code<span>Vault</span> AI</div>
+  </div>
+  <div class="topbar-pills">
+    <span class="pill" id="modelPill">gpt-4o-mini</span>
+    <span class="pill green" id="analyzedPill" style="display:none">✓ Analyzed</span>
+    <span class="pill amber" id="histPill" style="cursor:pointer" onclick="document.getElementById('historySection').scrollIntoView({behavior:'smooth'})">History: <span id="histCnt">0</span></span>
   </div>
 </div>
 
 <div class="main">
 
-  <!-- Setup banner (shown when no API key) -->
+  <!-- SETUP BANNER -->
   <div id="setupBanner">
-    <h2>⚡ One-time setup — add your OpenRouter API key</h2>
-    <p>CodeVault AI calls OpenRouter directly from your browser. Your key is saved only in your browser's localStorage and never sent to any server except OpenRouter.</p>
-    <div class="key-input-row">
-      <input type="password" id="keyInput" placeholder="sk-or-v1-..." autocomplete="off" />
-      <button class="btn-cyan" onclick="saveApiKey()">Save Key</button>
+    <h2>⚡ One-time setup — OpenRouter API key</h2>
+    <p>CodeVault AI runs entirely in your browser. It calls <strong style="color:#fff">OpenRouter</strong> directly — your key is saved only in <em>your</em> browser's localStorage and never touches any server except OpenRouter itself.</p>
+    <div class="key-row">
+      <input type="password" id="keyInput" placeholder="sk-or-v1-xxxxxxxxxxxxxxxxxxxxxxxx" autocomplete="off">
+      <button class="btn-primary" onclick="saveKey()">Save &amp; Continue</button>
     </div>
-    <p class="key-hint">Get a free key at <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai/keys</a> — free tier available, no credit card required.</p>
+    <p class="key-hint">Free key at <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai/keys</a> — no credit card needed for free tier.</p>
   </div>
 
-  <!-- Key status (shown when key exists) -->
-  <div id="keyStatus">
-    <div class="ks-left">API Key: <span id="keyPreview">sk-or-v1-...</span></div>
-    <div class="ks-right">
+  <!-- KEY STATUS BAR -->
+  <div id="keyBar">
+    <div class="kl">🔑 OpenRouter key: <span id="keyPreview"></span></div>
+    <div style="display:flex;gap:.5rem">
       <button class="btn-ghost" onclick="changeKey()">Change Key</button>
     </div>
   </div>
 
-  <!-- Editor -->
-  <div class="editor-panel">
-    <div class="editor-toolbar">
-      <label>Language</label>
-      <select class="lang-select" id="language">
-        <option>Python</option>
-        <option>JavaScript</option>
-        <option>TypeScript</option>
-        <option>Go</option>
-        <option>Java</option>
-        <option>Rust</option>
-        <option>C++</option>
-        <option>C#</option>
-        <option>PHP</option>
-        <option>Ruby</option>
-        <option>Swift</option>
-        <option>Kotlin</option>
-      </select>
-      <div class="toolbar-right">
-        <span id="charCount">0 / 20000</span>
-        <button class="btn-ghost" onclick="clearEditor()">Clear</button>
-        <button class="btn-ghost" onclick="copyCode()">Copy</button>
+  <!-- TABS -->
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('analyze',this)">Analyze Code</div>
+    <div class="tab" onclick="switchTab('compare',this)">Compare Two Files</div>
+    <div class="tab" onclick="switchTab('explain',this)">Explain Code</div>
+  </div>
+
+  <!-- TAB: ANALYZE -->
+  <div id="tab-analyze" class="tab-content active">
+    <div class="editor-panel">
+      <div class="editor-top">
+        <label>Language</label>
+        <select class="sel" id="language">
+          <option>Python</option><option>JavaScript</option><option>TypeScript</option>
+          <option>Go</option><option>Java</option><option>Rust</option><option>C++</option>
+          <option>C#</option><option>PHP</option><option>Ruby</option><option>Swift</option>
+          <option>Kotlin</option><option>SQL</option><option>Bash</option>
+        </select>
+        <label style="margin-left:.5rem">Focus</label>
+        <select class="sel" id="focus">
+          <option value="full">Full Review</option>
+          <option value="security">Security Only</option>
+          <option value="performance">Performance Only</option>
+          <option value="bugs">Bug Hunt</option>
+          <option value="readability">Readability</option>
+        </select>
+        <div class="editor-right">
+          <span id="charCnt">0 / 20k</span>
+          <span id="lineCount">0 lines</span>
+          <button class="btn-ghost" onclick="clearEditor()">Clear</button>
+          <button class="btn-ghost" onclick="copyEditor()">Copy</button>
+          <button class="btn-ghost" onclick="pasteDemo()">Demo</button>
+        </div>
+      </div>
+      <textarea id="code" placeholder="Paste your code here, or click Demo to try a sample..."
+        oninput="onCodeInput()"
+        onkeydown="handleTab(event)"
+      ></textarea>
+    </div>
+
+    <div class="action-bar">
+      <button id="analyzeBtn" onclick="analyze()">🔍 Analyze Code</button>
+      <div class="spinner" id="spinner"></div>
+      <span id="statusLine"></span>
+      <button class="btn-ghost" id="copyResultBtn" onclick="copyResults()" style="display:none">Copy Results</button>
+    </div>
+
+    <div class="alert" id="alert"></div>
+    <div id="results"></div>
+  </div>
+
+  <!-- TAB: COMPARE -->
+  <div id="tab-compare" class="tab-content">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem">
+      <div class="editor-panel">
+        <div class="editor-top"><span style="color:#888;font-size:.82rem">File A (before)</span></div>
+        <textarea id="codeA" style="width:100%;height:240px;background:#04040c;border:none;outline:none;color:#ddd;font-family:monospace;font-size:.85rem;padding:1rem;resize:vertical;line-height:1.6" placeholder="Paste original code..."></textarea>
+      </div>
+      <div class="editor-panel">
+        <div class="editor-top"><span style="color:#888;font-size:.82rem">File B (after)</span></div>
+        <textarea id="codeB" style="width:100%;height:240px;background:#04040c;border:none;outline:none;color:#ddd;font-family:monospace;font-size:.85rem;padding:1rem;resize:vertical;line-height:1.6" placeholder="Paste updated code..."></textarea>
       </div>
     </div>
-    <textarea id="code" placeholder="Paste your code here..." oninput="updateCharCount()"></textarea>
+    <div class="action-bar">
+      <button class="btn-primary" onclick="compareFiles()">⚖️ Compare &amp; Review</button>
+      <div class="spinner" id="spinnerC"></div>
+      <span id="statusC" style="color:#555;font-size:.82rem"></span>
+    </div>
+    <div class="alert" id="alertC"></div>
+    <div id="compareResults"></div>
   </div>
 
-  <!-- Action bar -->
-  <div class="action-bar">
-    <button id="analyzeBtn" onclick="analyze()">Analyze Code</button>
-    <div id="spinner"></div>
-    <span id="statusMsg"></span>
+  <!-- TAB: EXPLAIN -->
+  <div id="tab-explain" class="tab-content">
+    <div class="editor-panel">
+      <div class="editor-top"><span style="color:#888;font-size:.82rem">Paste any code to get a plain-English explanation</span></div>
+      <textarea id="codeExplain" style="width:100%;height:260px;background:#04040c;border:none;outline:none;color:#ddd;font-family:monospace;font-size:.88rem;padding:1.1rem;resize:vertical;line-height:1.65" placeholder="Paste code here..."></textarea>
+    </div>
+    <div class="action-bar">
+      <button class="btn-primary" onclick="explainCode()">💬 Explain This Code</button>
+      <div class="spinner" id="spinnerE"></div>
+      <span id="statusE" style="color:#555;font-size:.82rem"></span>
+    </div>
+    <div class="alert" id="alertE"></div>
+    <div id="explainResults"></div>
   </div>
 
-  <!-- Alert -->
-  <div id="alert" class="alert"></div>
-
-  <!-- Results -->
-  <div id="results">
-    <div class="results-header">
-      <h2>Analysis Results</h2>
-      <span class="overall-pill" id="overallPill">Overall: —</span>
-    </div>
-
-    <div class="score-grid" id="scoreGrid"></div>
-
-    <div class="feedback-box">
-      <h3>Summary</h3>
-      <p id="feedbackText"></p>
-    </div>
-
-    <div class="issues-box" id="issuesBox">
-      <h3>Issues Found</h3>
-      <div id="issuesList"></div>
-    </div>
-
-    <div class="suggestions-box" id="suggestionsBox">
-      <h3>Improvement Suggestions</h3>
-      <div id="suggestionsList"></div>
-    </div>
-  </div>
-
-  <!-- History -->
-  <div class="history-section" id="historySection" style="display:none">
-    <h2>Recent Analyses (<span id="histCountFull">0</span>)</h2>
-    <div class="history-grid" id="historyGrid"></div>
+  <!-- HISTORY -->
+  <div class="hist-section" id="historySection" style="display:none">
+    <h2>Recent Analyses (<span id="histCntFull">0</span>) — <span onclick="clearHistory()" style="cursor:pointer;color:#333;font-size:.76rem;text-transform:none;letter-spacing:0">clear all</span></h2>
+    <div class="hist-grid" id="histGrid"></div>
   </div>
 
 </div>
 
 <div class="footer">
-  Built by <a href="https://linkedin.com/in/theprashantdev" target="_blank">Prashant Raj</a>
+  Built by <a href="https://github.com/theprashantdev" target="_blank">Prashant Raj</a>
   &nbsp;·&nbsp;
   <a href="https://github.com/theprashantdev/codevault-ai" target="_blank">GitHub</a>
   &nbsp;·&nbsp;
-  Powered by <a href="https://openrouter.ai" target="_blank">OpenRouter</a>
+  Powered by <a href="https://openrouter.ai" target="_blank">OpenRouter</a> / gpt-4o-mini
 </div>
 
 <script>
-const STORAGE_KEY = 'cv_api_key';
-const HISTORY_KEY = 'cv_history';
-const OPENROUTER = 'https://openrouter.ai/api/v1/chat/completions';
+const KEY_STORE = 'cv_key_v2';
+const HIST_STORE = 'cv_hist_v2';
+const OR = 'https://openrouter.ai/api/v1/chat/completions';
 const MODEL = 'openai/gpt-4o-mini';
 
-const PROMPT = `You are an expert code reviewer. Analyze the given code and return ONLY a JSON object with this exact structure:
+const DEMO_CODE = `def find_user(db, user_id):
+    query = "SELECT * FROM users WHERE id = " + str(user_id)
+    result = db.execute(query)
+    password = result['password']
+    api_key = "sk-prod-abc123secret"
+    users = []
+    for i in range(len(result)):
+        for j in range(len(result)):
+            if result[i] == result[j]:
+                users.append(result[i])
+    return users`;
+
+// ── INIT
+window.onload = () => {
+  const k = getKey();
+  k ? showKeyBar(k) : showSetup();
+  renderHistory();
+};
+
+function getKey(){ return localStorage.getItem(KEY_STORE)||''; }
+
+function showSetup(){
+  document.getElementById('setupBanner').style.display='block';
+  document.getElementById('keyBar').style.display='none';
+}
+function showKeyBar(k){
+  document.getElementById('setupBanner').style.display='none';
+  const bar = document.getElementById('keyBar');
+  bar.style.display='flex';
+  document.getElementById('keyPreview').textContent = k.slice(0,16)+'...'+k.slice(-4);
+}
+function saveKey(){
+  const k = document.getElementById('keyInput').value.trim();
+  if(!k){ showAlertEl('alert','Enter your OpenRouter API key.'); return; }
+  if(!k.startsWith('sk-or-')){
+    showAlertEl('alert','Invalid key — OpenRouter keys start with sk-or-'); return;
+  }
+  localStorage.setItem(KEY_STORE, k);
+  showKeyBar(k);
+  hideAlert('alert');
+}
+function changeKey(){
+  localStorage.removeItem(KEY_STORE);
+  showSetup();
+  document.getElementById('keyInput').value='';
+}
+
+// ── TABS
+function switchTab(id, el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('tab-'+id).classList.add('active');
+}
+
+// ── EDITOR
+function onCodeInput(){
+  const v = document.getElementById('code').value;
+  const lines = v.split('\n').length;
+  document.getElementById('charCnt').textContent = v.length.toLocaleString()+' / 20k';
+  document.getElementById('charCnt').style.color = v.length>18000?'#ff5555':'#333';
+  document.getElementById('lineCount').textContent = lines+' lines';
+}
+function clearEditor(){
+  document.getElementById('code').value='';
+  onCodeInput();
+  document.getElementById('results').innerHTML='';
+  document.getElementById('results').style.display='none';
+  document.getElementById('copyResultBtn').style.display='none';
+  document.getElementById('analyzedPill').style.display='none';
+  hideAlert('alert');
+}
+function copyEditor(){
+  const v=document.getElementById('code').value;
+  if(v) navigator.clipboard.writeText(v).catch(()=>{});
+}
+function pasteDemo(){
+  document.getElementById('code').value=DEMO_CODE;
+  document.getElementById('language').value='Python';
+  onCodeInput();
+}
+function handleTab(e){
+  if(e.key!=='Tab')return;
+  e.preventDefault();
+  const t=e.target,s=t.selectionStart,end=t.selectionEnd;
+  t.value=t.value.substring(0,s)+'  '+t.value.substring(end);
+  t.selectionStart=t.selectionEnd=s+2;
+}
+
+// ── ALERTS
+function showAlertEl(id,msg){ const el=document.getElementById(id); el.textContent=msg; el.style.display='block'; }
+function hideAlert(id){ document.getElementById(id).style.display='none'; }
+
+// ── SCORE HELPERS
+function sc(v){ return v>=75?'#00e5ff':v>=45?'#ffaa00':'#ff5555'; }
+function scoreClass(v){ return v>=75?'sc-good':v>=45?'sc-mid':'sc-bad'; }
+
+// ── ANALYZE
+async function analyze(){
+  const code=document.getElementById('code').value.trim();
+  const lang=document.getElementById('language').value;
+  const focus=document.getElementById('focus').value;
+  hideAlert('alert');
+  if(!getKey()){ showAlertEl('alert','Add your OpenRouter API key first (see the yellow setup box above).'); return; }
+  if(!code){ showAlertEl('alert','Paste some code first, or click Demo.'); return; }
+  if(code.length>20000){ showAlertEl('alert','Code too long — max 20,000 characters.'); return; }
+  setLoading(true,'spinner','statusLine','analyzeBtn','Analyzing...');
+
+  const sysPrompt = buildAnalyzePrompt(focus);
+  const r = await callOR(sysPrompt, `Language: ${lang}\n\n${code}`, 'alert');
+  setLoading(false,'spinner','statusLine','analyzeBtn','🔍 Analyze Code');
+  if(!r) return;
+  renderAnalysis(r, lang, code);
+  saveHistory(lang, code, r);
+  document.getElementById('analyzedPill').style.display='';
+  document.getElementById('copyResultBtn').style.display='';
+}
+
+function buildAnalyzePrompt(focus){
+  const focusNote = {
+    full:'Do a comprehensive review covering all categories.',
+    security:'Focus specifically on security vulnerabilities. Still include other scores.',
+    performance:'Focus specifically on performance and complexity. Still include other scores.',
+    bugs:'Focus on finding bugs and logic errors. Still include other scores.',
+    readability:'Focus on code quality, naming, and readability. Still include other scores.',
+  }[focus]||'';
+  return `You are a senior software engineer doing a code review. ${focusNote}
+Return ONLY a JSON object with this exact structure:
 {
   "correctness": <0-100>,
   "performance": <0-100>,
@@ -423,6 +413,11 @@ const PROMPT = `You are an expert code reviewer. Analyze the given code and retu
   "readability": <0-100>,
   "overall": <0-100>,
   "summary": "<2-3 sentence overall assessment>",
+  "complexity": {
+    "time": "<e.g. O(n²)>",
+    "space": "<e.g. O(n)>",
+    "cognitive": "<Low|Medium|High>"
+  },
   "issues": [
     {"type": "bug|security|performance|style", "description": "<specific issue>"}
   ],
@@ -430,277 +425,247 @@ const PROMPT = `You are an expert code reviewer. Analyze the given code and retu
     "<actionable improvement suggestion>"
   ]
 }
-
-Scoring:
-- correctness: logic correctness, absence of bugs
-- performance: time/space complexity, efficiency
-- security: input validation, injection risks, secrets, unsafe patterns
-- readability: naming, structure, comments, maintainability
-- overall: weighted holistic score
-
-Return ONLY the JSON. No markdown, no explanation.`;
-
-// Init
-window.addEventListener('load', () => {
-  const key = getKey();
-  if (key) showKeyStatus(key);
-  else showSetup();
-  renderHistory();
-});
-
-function getKey() { return localStorage.getItem(STORAGE_KEY) || ''; }
-
-function showSetup() {
-  document.getElementById('setupBanner').style.display = 'block';
-  document.getElementById('keyStatus').style.display = 'none';
+Return ONLY the JSON. No markdown fences, no explanation.`;
 }
 
-function showKeyStatus(key) {
-  document.getElementById('setupBanner').style.display = 'none';
-  const ks = document.getElementById('keyStatus');
-  ks.style.display = 'flex';
-  document.getElementById('keyPreview').textContent =
-    key.substring(0, 14) + '...' + key.slice(-4);
-}
+function renderAnalysis(r, lang, code){
+  const overall = r.overall ?? Math.round(((r.correctness+r.performance+r.security+r.readability)/4));
+  const badgeColor = sc(overall);
 
-function saveApiKey() {
-  const k = document.getElementById('keyInput').value.trim();
-  if (!k || !k.startsWith('sk-or-')) {
-    showAlert('Please enter a valid OpenRouter key (starts with sk-or-)');
-    return;
+  let html = `
+    <div class="result-header">
+      <h2>Analysis Results — <span style="color:#888;font-weight:400">${lang}</span></h2>
+      <span class="overall-badge" style="color:${badgeColor};border-color:${badgeColor}44;background:${badgeColor}10">Overall ${overall}/100</span>
+    </div>
+    <div class="score-grid">
+      ${[['Correctness',r.correctness??0],['Performance',r.performance??0],['Security',r.security??0],['Readability',r.readability??0]].map(([l,v])=>`
+        <div class="score-card">
+          <div class="sc-lbl">${l}</div>
+          <div class="sc-num" style="color:${sc(v)}">${v}</div>
+          <div class="sc-bar-bg"><div class="sc-bar" style="width:${v}%;background:${sc(v)}"></div></div>
+        </div>`).join('')}
+    </div>`;
+
+  html += `<div class="box"><h3>📋 Summary</h3><p class="desc">${r.summary||'No summary.'}</p></div>`;
+
+  // Complexity
+  if(r.complexity){
+    html += `<div class="box"><h3>⏱ Complexity</h3><div class="complexity-grid">
+      <div class="cx-card"><div class="cx-label">Time</div><div class="cx-val">${r.complexity.time||'—'}</div></div>
+      <div class="cx-card"><div class="cx-label">Space</div><div class="cx-val">${r.complexity.space||'—'}</div></div>
+      <div class="cx-card"><div class="cx-label">Cognitive Load</div><div class="cx-val">${r.complexity.cognitive||'—'}</div></div>
+    </div></div>`;
   }
-  localStorage.setItem(STORAGE_KEY, k);
-  showKeyStatus(k);
-  hideAlert();
-}
 
-function changeKey() {
-  localStorage.removeItem(STORAGE_KEY);
-  showSetup();
-  document.getElementById('keyInput').value = '';
-}
-
-function updateCharCount() {
-  const len = document.getElementById('code').value.length;
-  const el = document.getElementById('charCount');
-  el.textContent = `${len.toLocaleString()} / 20,000`;
-  el.style.color = len > 18000 ? '#ff5555' : '#444';
-}
-
-function clearEditor() {
-  document.getElementById('code').value = '';
-  updateCharCount();
-  document.getElementById('results').style.display = 'none';
-  hideAlert();
-}
-
-function copyCode() {
-  const code = document.getElementById('code').value;
-  if (!code) return;
-  navigator.clipboard.writeText(code).catch(() => {});
-}
-
-function showAlert(msg) {
-  const el = document.getElementById('alert');
-  el.textContent = msg;
-  el.style.display = 'block';
-  el.scrollIntoView({behavior:'smooth',block:'nearest'});
-}
-
-function hideAlert() {
-  document.getElementById('alert').style.display = 'none';
-}
-
-function setLoading(on) {
-  document.getElementById('analyzeBtn').disabled = on;
-  document.getElementById('analyzeBtn').textContent = on ? 'Analyzing...' : 'Analyze Code';
-  document.getElementById('spinner').style.display = on ? 'block' : 'none';
-  document.getElementById('statusMsg').textContent = on ? 'Calling OpenRouter...' : '';
-}
-
-async function analyze() {
-  hideAlert();
-  const code = document.getElementById('code').value.trim();
-  const lang = document.getElementById('language').value;
-  const key = getKey();
-
-  if (!key) { showAlert('Add your OpenRouter API key first (see the setup box above).'); return; }
-  if (!code) { showAlert('Paste some code first.'); return; }
-  if (code.length > 20000) { showAlert('Code too long — max 20,000 characters.'); return; }
-
-  setLoading(true);
-
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 35000);
-
-  try {
-    const res = await fetch(OPENROUTER, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${key}`,
-        'Content-Type': 'application/json',
-        'HTTP-Referer': location.origin,
-        'X-Title': 'CodeVault AI',
-      },
-      body: JSON.stringify({
-        model: MODEL,
-        messages: [
-          {role:'system', content: PROMPT},
-          {role:'user', content: `Language: ${lang}\n\n${code}`}
-        ],
-        response_format: {type:'json_object'},
-        temperature: 0.1,
-        max_tokens: 1500,
-      }),
-      signal: controller.signal,
-    });
-    clearTimeout(timer);
-
-    if (res.status === 401) { showAlert('Invalid API key. Check your OpenRouter key and try again.'); return; }
-    if (res.status === 402) { showAlert('No credits on your OpenRouter account. Add credits at openrouter.ai.'); return; }
-    if (res.status === 429) { showAlert('Rate limit hit. Wait a few seconds and try again.'); return; }
-    if (!res.ok) {
-      const t = await res.text();
-      showAlert(`OpenRouter error ${res.status}. Try again.`);
-      return;
-    }
-
-    const data = await res.json();
-    const content = data?.choices?.[0]?.message?.content;
-    if (!content) { showAlert('Empty response from AI. Try again.'); return; }
-
-    let r;
-    try { r = JSON.parse(content); }
-    catch(e) {
-      // try to extract JSON from the content
-      const match = content.match(/\{[\s\S]*\}/);
-      if (match) { try { r = JSON.parse(match[0]); } catch(e2) {} }
-    }
-    if (!r) { showAlert('Could not parse AI response. Try again.'); return; }
-
-    renderResults(r, lang);
-    saveToHistory(code, lang, r);
-
-  } catch(err) {
-    clearTimeout(timer);
-    if (err.name === 'AbortError') showAlert('Request timed out (35s). OpenRouter may be busy — try again.');
-    else showAlert('Network error. Check your connection and try again.');
-  } finally {
-    setLoading(false);
-  }
-}
-
-function scoreClass(v) {
-  return v >= 75 ? 'sc-good' : v >= 45 ? 'sc-mid' : 'sc-bad';
-}
-function scoreColor(v) {
-  return v >= 75 ? '#00e5ff' : v >= 45 ? '#ffaa00' : '#ff5555';
-}
-
-function renderResults(r, lang) {
-  const overall = r.overall ?? Math.round(((r.correctness||0)+(r.performance||0)+(r.security||0)+(r.readability||0))/4);
-  document.getElementById('overallPill').textContent = `Overall: ${overall}/100`;
-  document.getElementById('overallPill').style.color = scoreColor(overall);
-
-  const metrics = [
-    {label:'Correctness', val: r.correctness??0},
-    {label:'Performance', val: r.performance??0},
-    {label:'Security',    val: r.security??0},
-    {label:'Readability', val: r.readability??0},
-  ];
-  document.getElementById('scoreGrid').innerHTML = metrics.map(m => `
-    <div class="score-card">
-      <div class="sc-label">${m.label}</div>
-      <div class="sc-val ${scoreClass(m.val)}">${m.val}</div>
-      <div class="sc-bar-bg"><div class="sc-bar" style="width:${m.val}%;background:${scoreColor(m.val)}"></div></div>
+  // Issues
+  const issues = Array.isArray(r.issues)?r.issues:[];
+  if(issues.length){
+    html += `<div class="box"><h3>🐛 Issues Found (${issues.length})</h3>`;
+    html += issues.map(i=>`<div class="issue-row">
+      <span class="itag ${i.type||'info'}">${i.type||'note'}</span>
+      <span class="issue-txt">${esc(i.description||'')}</span>
     </div>`).join('');
-
-  document.getElementById('feedbackText').textContent = r.summary || 'No summary provided.';
-
-  const issues = Array.isArray(r.issues) ? r.issues : [];
-  const issuesBox = document.getElementById('issuesBox');
-  if (issues.length === 0) {
-    issuesBox.style.display = 'none';
-  } else {
-    issuesBox.style.display = 'block';
-    const tagMap = {bug:'tag-bug',security:'tag-security',performance:'tag-perf',style:'tag-style'};
-    document.getElementById('issuesList').innerHTML = issues.map(i => `
-      <div class="issue-item">
-        <span class="issue-tag ${tagMap[i.type]||'tag-info'}">${i.type||'note'}</span>
-        <span class="issue-text">${i.description||''}</span>
-      </div>`).join('');
+    html += `</div>`;
   }
 
-  const sugs = Array.isArray(r.suggestions) ? r.suggestions : [];
-  const sugBox = document.getElementById('suggestionsBox');
-  if (sugs.length === 0) {
-    sugBox.style.display = 'none';
-  } else {
-    sugBox.style.display = 'block';
-    document.getElementById('suggestionsList').innerHTML = sugs.map(s =>
-      `<div class="suggestion-item">${s}</div>`).join('');
+  // Suggestions
+  const sugs = Array.isArray(r.suggestions)?r.suggestions:[];
+  if(sugs.length){
+    html += `<div class="box"><h3>💡 Suggestions (${sugs.length})</h3>`;
+    html += sugs.map(s=>`<div class="sug-row">${esc(s)}</div>`).join('');
+    html += `</div>`;
   }
 
-  document.getElementById('results').style.display = 'block';
-  document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'});
+  const el = document.getElementById('results');
+  el.innerHTML = html;
+  el.style.display = 'block';
+  el.scrollIntoView({behavior:'smooth',block:'start'});
+
+  // store for copy
+  window._lastResult = {r, lang, code};
 }
 
-// History
-function getHistory() {
-  try { return JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; }
-  catch(e) { return []; }
+// ── COMPARE
+async function compareFiles(){
+  const a=document.getElementById('codeA').value.trim();
+  const b=document.getElementById('codeB').value.trim();
+  hideAlert('alertC');
+  if(!getKey()){ showAlertEl('alertC','Add your OpenRouter API key first.'); return; }
+  if(!a||!b){ showAlertEl('alertC','Paste code into both boxes.'); return; }
+  setLoading(true,'spinnerC','statusC',null,'');
+  document.getElementById('statusC').textContent='Comparing...';
+
+  const prompt=`You are a senior code reviewer. Compare File A (original) and File B (updated).
+Return ONLY JSON:
+{
+  "summary": "<what changed and overall impression>",
+  "improvements": ["<things that got better>"],
+  "regressions": ["<things that got worse or new issues introduced>"],
+  "net_score_change": <-100 to +100>,
+  "recommendation": "Approve|Request Changes|Needs Discussion"
+}
+Return ONLY JSON.`;
+  const r = await callOR(prompt, `File A:\n${a}\n\n---\n\nFile B:\n${b}`, 'alertC');
+  setLoading(false,'spinnerC','statusC',null,'');
+  document.getElementById('statusC').textContent='';
+  if(!r)return;
+
+  const recColor = r.recommendation==='Approve'?'#00e5ff':r.recommendation==='Request Changes'?'#ff5555':'#ffaa00';
+  const delta = r.net_score_change??0;
+  const deltaStr = delta>0?`+${delta}`:String(delta);
+  const deltaColor = delta>0?'#00ff88':delta<0?'#ff5555':'#888';
+  let html=`
+    <div class="box"><h3>⚖️ Comparison Results</h3>
+      <p class="desc" style="margin-bottom:.8rem">${esc(r.summary||'')}</p>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap">
+        <div style="background:#06060f;border:1px solid #0f0f20;border-radius:8px;padding:.7rem 1rem;flex:1">
+          <div style="color:#555;font-size:.75rem;margin-bottom:.3rem">Net Score Change</div>
+          <div style="font-size:1.4rem;font-weight:800;color:${deltaColor}">${deltaStr}</div>
+        </div>
+        <div style="background:#06060f;border:1px solid #0f0f20;border-radius:8px;padding:.7rem 1rem;flex:1">
+          <div style="color:#555;font-size:.75rem;margin-bottom:.3rem">Recommendation</div>
+          <div style="font-size:1rem;font-weight:700;color:${recColor}">${r.recommendation||'—'}</div>
+        </div>
+      </div>
+    </div>`;
+  if(r.improvements?.length){
+    html+=`<div class="box"><h3 style="color:#00ff88">✅ Improvements</h3>`+r.improvements.map(s=>`<div class="sug-row" style="--c:#00ff88">${esc(s)}</div>`).join('')+'</div>';
+  }
+  if(r.regressions?.length){
+    html+=`<div class="box"><h3 style="color:#ff5555">⚠️ Regressions / New Issues</h3>`+r.regressions.map(s=>`<div class="sug-row">${esc(s)}</div>`).join('')+'</div>';
+  }
+  document.getElementById('compareResults').innerHTML=html;
+  document.getElementById('compareResults').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-function saveToHistory(code, lang, result) {
-  const hist = getHistory();
-  hist.unshift({
-    ts: Date.now(),
-    lang,
-    preview: code.trim().split('\n')[0].substring(0, 60),
-    overall: result.overall ?? 0,
-    correctness: result.correctness ?? 0,
-    performance: result.performance ?? 0,
-    security: result.security ?? 0,
-    readability: result.readability ?? 0,
-    summary: result.summary || '',
-  });
-  // Keep last 20
-  if (hist.length > 20) hist.splice(20);
-  localStorage.setItem(HISTORY_KEY, JSON.stringify(hist));
+// ── EXPLAIN
+async function explainCode(){
+  const code=document.getElementById('codeExplain').value.trim();
+  hideAlert('alertE');
+  if(!getKey()){ showAlertEl('alertE','Add your OpenRouter API key first.'); return; }
+  if(!code){ showAlertEl('alertE','Paste some code first.'); return; }
+  setLoading(true,'spinnerE','statusE',null,'');
+  document.getElementById('statusE').textContent='Explaining...';
+
+  const prompt=`Explain the following code in plain English. Return ONLY JSON:
+{
+  "one_liner": "<one sentence summary>",
+  "what_it_does": "<2-4 sentences: purpose and high-level logic>",
+  "how_it_works": ["<step-by-step explanation as array of strings>"],
+  "key_concepts": ["<programming concept used>"],
+  "gotchas": ["<potential gotchas or edge cases>"]
+}
+Return ONLY JSON.`;
+  const r = await callOR(prompt, code, 'alertE');
+  setLoading(false,'spinnerE','statusE',null,'');
+  document.getElementById('statusE').textContent='';
+  if(!r)return;
+
+  let html=`<div class="box"><h3>💬 Plain English Explanation</h3>
+    <p class="desc" style="font-size:1rem;color:#fff;margin-bottom:.6rem">${esc(r.one_liner||'')}</p>
+    <p class="desc">${esc(r.what_it_does||'')}</p></div>`;
+  if(r.how_it_works?.length){
+    html+=`<div class="box"><h3>🔄 Step by Step</h3>`+r.how_it_works.map((s,i)=>`<div class="sug-row"><span style="color:#00e5ff88">${i+1}. </span>${esc(s)}</div>`).join('')+'</div>';
+  }
+  if(r.key_concepts?.length){
+    html+=`<div class="box"><h3>📚 Key Concepts</h3><div style="display:flex;flex-wrap:wrap;gap:.4rem">`+r.key_concepts.map(c=>`<span style="background:#00e5ff12;color:#00e5ff;border:1px solid #00e5ff25;padding:.2rem .6rem;border-radius:20px;font-size:.78rem">${esc(c)}</span>`).join('')+'</div></div>';
+  }
+  if(r.gotchas?.length){
+    html+=`<div class="box"><h3 style="color:#ffaa00">⚠️ Gotchas</h3>`+r.gotchas.map(s=>`<div class="sug-row">${esc(s)}</div>`).join('')+'</div>';
+  }
+  document.getElementById('explainResults').innerHTML=html;
+  document.getElementById('explainResults').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ── CORE API CALL
+async function callOR(sysPrompt, userContent, alertId){
+  const key=getKey();
+  if(!key){ showAlertEl(alertId,'Add your OpenRouter API key first.'); return null; }
+  const ctrl=new AbortController();
+  const t=setTimeout(()=>ctrl.abort(),38000);
+  try{
+    const res=await fetch(OR,{
+      method:'POST',
+      headers:{'Authorization':`Bearer ${key}`,'Content-Type':'application/json','HTTP-Referer':location.origin,'X-Title':'CodeVault AI'},
+      body:JSON.stringify({model:MODEL,messages:[{role:'system',content:sysPrompt},{role:'user',content:userContent}],response_format:{type:'json_object'},temperature:0.1,max_tokens:1800}),
+      signal:ctrl.signal,
+    });
+    clearTimeout(t);
+    if(res.status===401){showAlertEl(alertId,'Invalid API key — check your OpenRouter key.');return null;}
+    if(res.status===402){showAlertEl(alertId,'No OpenRouter credits. Add at openrouter.ai.');return null;}
+    if(res.status===429){showAlertEl(alertId,'Rate limited. Wait a moment and retry.');return null;}
+    if(!res.ok){showAlertEl(alertId,`OpenRouter error ${res.status}. Try again.`);return null;}
+    const data=await res.json();
+    const content=data?.choices?.[0]?.message?.content;
+    if(!content){showAlertEl(alertId,'Empty AI response. Try again.');return null;}
+    let parsed;
+    try{parsed=JSON.parse(content);}catch(e){
+      const m=content.match(/\{[\s\S]*\}/);
+      if(m)try{parsed=JSON.parse(m[0]);}catch(e2){}
+    }
+    if(!parsed){showAlertEl(alertId,'Could not parse AI response. Try again.');return null;}
+    return parsed;
+  }catch(err){
+    clearTimeout(t);
+    if(err.name==='AbortError'){showAlertEl(alertId,'Request timed out — OpenRouter busy, try again.');}
+    else{showAlertEl(alertId,'Network error. Check your connection.');}
+    return null;
+  }
+}
+
+// ── LOADING STATE
+function setLoading(on,spinnerId,statusId,btnId,label){
+  document.getElementById(spinnerId).style.display=on?'block':'none';
+  if(statusId)document.getElementById(statusId).textContent=on?(statusId==='statusLine'?'Calling OpenRouter...':''):(statusId==='statusLine'?'':'');
+  if(btnId){
+    document.getElementById(btnId).disabled=on;
+    document.getElementById(btnId).textContent=on?'Analyzing...':label;
+  }
+}
+
+// ── COPY RESULTS
+function copyResults(){
+  const r=window._lastResult;
+  if(!r)return;
+  const text=`CodeVault AI — ${r.lang}\nOverall: ${r.r.overall}/100\nCorrectness: ${r.r.correctness} | Performance: ${r.r.performance} | Security: ${r.r.security} | Readability: ${r.r.readability}\n\nSummary:\n${r.r.summary}\n\nIssues:\n${(r.r.issues||[]).map(i=>`• [${i.type}] ${i.description}`).join('\n')}\n\nSuggestions:\n${(r.r.suggestions||[]).map(s=>`• ${s}`).join('\n')}`;
+  navigator.clipboard.writeText(text).catch(()=>{});
+}
+
+// ── HISTORY
+function getHistory(){ try{return JSON.parse(localStorage.getItem(HIST_STORE))||[];}catch{return [];} }
+function saveHistory(lang,code,r){
+  const h=getHistory();
+  h.unshift({ts:Date.now(),lang,preview:code.trim().split('\n')[0].substring(0,55),overall:r.overall??0});
+  if(h.length>25)h.splice(25);
+  localStorage.setItem(HIST_STORE,JSON.stringify(h));
   renderHistory();
 }
-
-function renderHistory() {
-  const hist = getHistory();
-  const badge = document.getElementById('histCount');
-  const badgeFull = document.getElementById('histCountFull');
-  const section = document.getElementById('historySection');
-  const grid = document.getElementById('historyGrid');
-
-  badge.textContent = hist.length;
-  if (badgeFull) badgeFull.textContent = hist.length;
-
-  if (hist.length === 0) { section.style.display = 'none'; return; }
-  section.style.display = 'block';
-
-  grid.innerHTML = hist.map((h, i) => {
-    const d = new Date(h.ts);
-    const time = d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
-    return `
-      <div class="history-card" title="Click to see scores">
-        <div class="hc-top">
-          <span class="hc-lang">${h.lang}</span>
-          <span class="hc-score" style="color:${scoreColor(h.overall)}">${h.overall}/100</span>
-        </div>
-        <div class="hc-preview">${h.preview || '(no preview)'}</div>
-        <div class="hc-time">${time}</div>
-      </div>`;
+function clearHistory(){ localStorage.removeItem(HIST_STORE); renderHistory(); }
+function renderHistory(){
+  const h=getHistory();
+  document.getElementById('histCnt').textContent=h.length;
+  const full=document.getElementById('histCntFull');
+  if(full)full.textContent=h.length;
+  const sec=document.getElementById('historySection');
+  const grid=document.getElementById('histGrid');
+  if(!h.length){sec.style.display='none';return;}
+  sec.style.display='block';
+  grid.innerHTML=h.map((item,i)=>{
+    const d=new Date(item.ts);
+    const time=d.toLocaleDateString()+' '+d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+    return `<div class="hcard">
+      <div class="hc-top">
+        <span class="hc-lang">${item.lang}</span>
+        <span class="hc-score" style="color:${sc(item.overall)}">${item.overall}/100</span>
+      </div>
+      <div class="hc-prev">${esc(item.preview||'(no preview)')}</div>
+      <div class="hc-time">${time}</div>
+    </div>`;
   }).join('');
 }
 
-function scrollToHistory() {
-  document.getElementById('historySection').scrollIntoView({behavior:'smooth'});
-}
+// ── ESCAPE
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 </script>
 </body>
 </html>
